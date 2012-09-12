@@ -1,4 +1,3 @@
-import time
 import gevent
 from datetime import datetime
 
