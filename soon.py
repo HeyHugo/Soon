@@ -12,9 +12,9 @@ class Soon(object):
             gevent.spawn(func, *args, **kw_args)
             self.register[name] = gevent.spawn_later(interval, schedule_interval, func, name, interval, *args, **kw_args)
         
-        def schedule_once(func, delay, name):
+        def schedule_once(func, delay, name, *args, **kw_args):
             gevent.sleep(delay)
-            func()
+            func(*args, **kw_args)
             del self.register[name]
     
         name = kw_args.pop("name", None)
@@ -39,7 +39,7 @@ class Soon(object):
             self.register[name] = gevent.spawn_later(delay, schedule_interval, func, name, interval, *args, **kw_args)
             
         else:
-            self.register[name] = gevent.spawn(schedule_once, func, delay, name)
+            self.register[name] = gevent.spawn(schedule_once, func, delay, name, *args, **kw_args)
             
     def unschedule(self, name):
         if name in self.register:
