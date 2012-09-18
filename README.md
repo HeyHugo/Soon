@@ -9,15 +9,7 @@ Usage
 
 Import and initialize
 
-	from soon Import Soon
-
-	''' It's highly likely you want the following two imports as well as monkey patching '''
-	import gevent 
-	from gevent import monkey
-
-	monkey.patch_all() # monkey is your friend
-	
-	soon = Soon()
+	import soon
 
 Define a function we can use for show:
 
@@ -40,6 +32,8 @@ Schedule a task to execute every 30 seconds:
 Schedule a task to execute every 30 minutes, starting from 2012-10-01 05.00 pm:
 
 	soon.schedule(task, start=datetime(2012, 10, 1, 17, 0), interval={"minutes":30})
+
+Pass `soon.schedule` the keyword arg `name` to specify a name for your task, default is `__name__` of the function
 	
 Return a list with names of all scheduled tasks
 
@@ -48,8 +42,6 @@ Return a list with names of all scheduled tasks
 Unschedule a task:
 
 	soon.unschedule("taskname")
-
-Pass schedule the keyword arg `name` to specify a name for your task
 
 Clear all scheduled tasks:
 
