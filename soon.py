@@ -14,8 +14,7 @@ def schedule(func, *args, **kw_args):
         gevent.spawn(func, *args, **kw_args)
         _register[name] = gevent.spawn_later(interval, schedule_interval, func, name, interval, *args, **kw_args)
     
-    def schedule_once(func, delay, name, *args, **kw_args):
-        gevent.sleep(delay)
+    def schedule_once(func, name, *args, **kw_args):
         func(*args, **kw_args)
         del _register[name]
 
@@ -48,7 +47,7 @@ def schedule(func, *args, **kw_args):
             func(*args, **kw_args)
         
     else:
-        _register[name] = gevent.spawn(schedule_once, func, delay, name, *args, **kw_args)
+        _register[name] = gevent.spawn_later(delay, schedule_once, func, name, *args, **kw_args)
         
 def unschedule(name):
     if name in _register:
