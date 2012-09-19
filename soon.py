@@ -22,6 +22,7 @@ def schedule(func, *args, **kw_args):
     name = kw_args.pop("name", None)
     start = kw_args.pop("start", None)
     interval = kw_args.pop("interval", None)
+    run_initial = kw_args.pop("run_initial", False)
     
     if isinstance(start, datetime):
         delay = (start - datetime.now()).total_seconds()
@@ -42,6 +43,9 @@ def schedule(func, *args, **kw_args):
             delay = interval
 
         _register[name] = gevent.spawn_later(delay, schedule_interval, func, name, interval, *args, **kw_args)
+
+        if run_initial:
+            func(*args, **kw_args)
         
     else:
         _register[name] = gevent.spawn(schedule_once, func, delay, name, *args, **kw_args)
